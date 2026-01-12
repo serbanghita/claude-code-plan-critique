@@ -15,7 +15,7 @@ Slash commands for iterative plan review and execution in Claude Code.
 ### From GitHub (Recommended)
 
 ```
-/plugin install serbanghita/claude-code-plan-critique
+/install-github-skill https://github.com/serbanghita/claude-code-plan-critique
 ```
 
 ### Manual Installation
@@ -25,6 +25,8 @@ git clone https://github.com/serbanghita/claude-code-plan-critique.git && \
 cp -r claude-code-plan-critique/.claude/commands .claude/ && \
 rm -rf claude-code-plan-critique
 ```
+
+**Note:** If Claude Code is already running, restart it to load the new commands.
 
 ## Usage
 
