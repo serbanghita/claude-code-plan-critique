@@ -12,13 +12,7 @@ Slash commands for iterative plan review and execution in Claude Code.
 
 ## Install
 
-### From GitHub (Recommended)
-
-```
-/install-github-skill https://github.com/serbanghita/claude-code-plan-critique
-```
-
-### Manual Installation
+Clone the repository and copy the commands to your project:
 
 ```bash
 git clone https://github.com/serbanghita/claude-code-plan-critique.git && \
