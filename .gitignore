@@ -1,17 +1,1 @@
-# OS files
-.DS_Store
-Thumbs.db
-
-# Editor files
-*.swp
-*.swo
-*~
-
-# The plan folder contents are templates - ignore user data
-# Users will have their own plans that shouldn't be committed
-.claude/plan/execution-log.md
-.claude/plan/execution-state.json
-
-# Archived plans (user-specific data)
-.claude/archived_plans/*
-!.claude/archived_plans/.gitkeep
+.idea

@@ -1,0 +1,13 @@
+{
+  "name": "plan-critique",
+  "version": "1.0.0",
+  "description": "Iterative plan review and execution workflow for Claude Code",
+  "author": "Serban Ghita",
+  "repository": "https://github.com/serbanghita/claude-code-plan-critique",
+  "license": "MIT",
+  "type": "commands",
+  "commands": ["plan-create", "plan-critique", "plan-execute", "plan-archive"],
+  "install": {
+    "commands": ".claude/commands/"
+  }
+}

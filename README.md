@@ -1,143 +1,59 @@
 # claude-code-plan-critique
 
-A Claude Code plugin for iterative plan review and execution. Write plans, get AI-powered critique, iterate until ready, then execute.
-
-## Installation
-
-### Option 1: Clone and Copy
-
-```bash
-git clone https://github.com/serbanghita/claude-code-plan-critique.git
-cp -r claude-code-plan-critique/.claude /path/to/your/project/
+```
++-----------------+
+| Plan & critique |
++-----------------+
 ```
 
-### Option 2: Download and Extract
+Slash commands for iterative plan review and execution in Claude Code.
 
-1. Download the [latest release](https://github.com/serbanghita/claude-code-plan-critique/releases)
-2. Extract the `.claude` folder to your project root
+**Version:** 1.0.0
 
-### Option 3: Git Subtree (keeps updates)
+## Install
 
-```bash
-git subtree add --prefix=.claude https://github.com/serbanghita/claude-code-plan-critique.git main --squash
+### Via Marketplace (Recommended)
+
+```
+/plugin marketplace add serbanghita/claude-code-plan-critique
+/plugin install plan-critique
 ```
 
-### Post-Installation
-
-Create a `CLAUDE.md` file in your project root with your project standards (required for critique to work):
+### Manual Installation
 
 ```bash
-cp claude-code-plan-critique/CLAUDE.md /path/to/your/project/
+git clone https://github.com/serbanghita/claude-code-plan-critique.git && \
+cp -r claude-code-plan-critique/.claude/commands .claude/
 ```
 
 ## Usage
 
-### 1. Create Your Plan
-
-Edit `.claude/plan/plan.md` with your execution plan. Describe what you want to achieve as clearly as possible.
-
-You can also add supporting files to the `.claude/plan/` folder:
-- SQL queries
-- Text snippets
-- Images or diagrams
-- Reference documents
-- Any other materials relevant to your plan
-
-### 2. Critique Your Plan
-
-Run in Claude Code:
-```
-/plan-critique
-```
-
-Claude will review your plan (including any supporting files) and write feedback to `.claude/plan/critique.md`. Review the critique, update your plan, and repeat until the status is `READY_TO_EXECUTE`.
-
-### 3. Execute Your Plan
-
-Run in Claude Code:
-```
-/plan-execute
-```
-
-Claude will parse your plan into steps, ask for confirmation, and execute each step. Progress is logged to `.claude/plan/execution-log.md`.
-
-### 4. Archive Your Plan
-
-Run in Claude Code:
-```
-/plan-archive
-```
-
-Claude will save your entire plan folder (including all supporting files) to `.claude/archived_plans/` for future reference.
-
-## Commands
-
-| Command | Description |
-|---------|-------------|
-| `/plan-critique` | Review and critique the current plan |
-| `/plan-execute` | Execute the plan step by step |
-| `/plan-archive` | Archive the plan for future reference |
-
-## File Structure
-
-```
-.claude/
-  plan/                        # Working directory for current plan
-    plan.md                    # Your plan (edit this)
-    critique.md                # Auto-generated critique
-    execution-log.md           # Auto-generated execution log
-    execution-state.json       # Auto-generated resume state
-    [your-files]               # SQL, images, snippets, etc.
-  archived_plans/              # Archived plan folders
-    2026-01-12_14-30-00_feature-name/
-      plan.md
-      execution-log.md
-      archive-info.md
-      [archived supporting files]
-  commands/
-    plan-critique.md           # Critique command definition
-    plan-execute.md            # Execute command definition
-    plan-archive.md            # Archive command definition
-```
-
-## Critique Status Levels
-
-| Status | Meaning |
-|--------|---------|
-| `NOT_READY` | Has Critical or Major issues - do not execute |
-| `NEEDS_MINOR_CHANGES` | Only Minor issues remain - can execute with caution |
-| `READY_TO_EXECUTE` | No blocking issues - safe to execute |
-
-## Archive Naming Convention
-
-Archived plans are stored as folders with the naming pattern:
-```
-YYYY-MM-DD_HH-MM-SS_[slug]/
-```
-
-Where `[slug]` is derived from the plan title (lowercase, hyphens, max 50 chars).
-
-Example: `2026-01-12_14-30-00_add-user-authentication/`
-
-## What Gets Archived
-
-When you run `/plan-archive`:
-
-**Included:**
-- `plan.md` (the original plan)
-- `execution-log.md` (if executed)
-- All supporting files (SQL, images, etc.)
-- `archive-info.md` (auto-generated metadata)
-
-**Excluded:**
-- `critique.md` (only keywords preserved in archive-info.md)
-- `execution-state.json` (temporary state)
-
-## Requirements
+### Pre-requisites
 
 - [Claude Code](https://claude.ai/claude-code) CLI installed
-- `CLAUDE.md` file in your project root with project standards
+- A `CLAUDE.md` file in your project root with your project standards
 
-## License
+### Commands
 
-MIT
+**`/plan-create`** - Create a new plan. On first run, asks where to store plans. Then asks for the plan name and
+creates a folder with a template.
+
+**`/plan-critique`** - Review your plan. Lists available plans, lets you select one, and generates a critique with
+issues and suggestions.
+
+**`/plan-execute`** - Execute your plan. Parses the plan into steps, asks for confirmation, and runs each step.
+Supports resume on failure.
+
+**`/plan-archive`** - Archive a completed plan. Moves it to the `archived/` subfolder and deletes the original.
+
+### Workflow
+
+1. Run `/plan-create` and provide a name
+2. Edit the generated `plan.md` file
+3. Run `/plan-critique` and iterate until satisfied
+4. Run `/plan-execute` to implement
+5. Run `/plan-archive` to clean up
+
+## Credits
+
+Created by [Serban Ghita](https://github.com/serbanghita) under MIT License
