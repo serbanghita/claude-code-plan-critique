@@ -84,10 +84,10 @@ Iteration: [number]
 
 ## [Issue Title]
 
-**Description:**
+**Description:**    
 [Clear, concise summary of the issue]
 
-**Suggested Solution:**
+**Suggested Solution:**  
 [Suggested fix with all pertinent details]
 
 ```[language]
