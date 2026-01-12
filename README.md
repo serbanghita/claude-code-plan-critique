@@ -2,7 +2,7 @@
 
 ```
 +-----------------+
-| Plan & critique |
+| Plan & Critique |
 +-----------------+
 ```
 
@@ -12,11 +12,10 @@ Slash commands for iterative plan review and execution in Claude Code.
 
 ## Install
 
-### Via Marketplace (Recommended)
+### From GitHub (Recommended)
 
 ```
-/plugin marketplace add serbanghita/claude-code-plan-critique
-/plugin install plan-critique
+/plugin install serbanghita/claude-code-plan-critique
 ```
 
 ### Manual Installation
