@@ -22,7 +22,8 @@ Slash commands for iterative plan review and execution in Claude Code.
 
 ```bash
 git clone https://github.com/serbanghita/claude-code-plan-critique.git && \
-cp -r claude-code-plan-critique/.claude/commands .claude/
+cp -r claude-code-plan-critique/.claude/commands .claude/ && \
+rm -rf claude-code-plan-critique
 ```
 
 ## Usage
