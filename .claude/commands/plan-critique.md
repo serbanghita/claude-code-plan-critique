@@ -1,6 +1,7 @@
 # Plan Critique Command
 
 You are performing an iterative review of the user's execution plan.
+Think hard and critique the plan, code, architecture, system design, design patterns.
 
 ## Instructions
 
@@ -90,9 +91,9 @@ Iteration: [number]
 **Suggested Solution:**  
 [Suggested fix with all pertinent details]
 
-```[language]
-[code block if applicable]
-```
+    ```[language]
+    [code block if applicable]
+    ```
 
 ---
 
@@ -107,6 +108,7 @@ No issues found. Plan is ready for execution via `/plan-execute`.
 When critiquing, analyze:
 - Codebase structure (existing files, directories, patterns)
 - Project standards from CLAUDE.md
+- The README.md file
 - Dependencies (package.json, requirements.txt, etc.)
 - Git state if relevant
 - Whether referenced files/APIs actually exist
@@ -114,6 +116,11 @@ When critiquing, analyze:
 
 ## Important
 
+- Use LSP to find classes, methods, references
+- Add the found issues/observations list in the beginning of the critique.md file as a Table of contents.
+- Always follow the chapters from plan.md as a structure for critique.
+- Add new chapters of critique to the bottom of the critique.md file.
+- Add new subchapters under existing chapters in the critique.md file.
 - Always overwrite the previous critique (do not append)
 - Increment the iteration number from the previous critique
 - Be direct and constructive in feedback

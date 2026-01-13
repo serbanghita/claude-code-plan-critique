@@ -9,7 +9,7 @@ You are creating a new plan folder for the user.
    - If file doesn't exist or `plansFolder` is not set, this is the first
      execution:
      - Ask the user: "Where would you like to store your plans?
-       Please provide a folder path (e.g., `.claude/plans` or `docs/plans`):"
+       Please provide a folder path (e.g., `.claude/plans` or `docs/plans` or `planning`):"
      - Wait for user response
      - Save the path as `plansFolder` in `.claude/plan-critique-config.json`
      - Create the folder if it doesn't exist
