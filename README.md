@@ -12,43 +12,12 @@ Enables you to work with multiple user written plans while keeping a control of 
 ## How it works
 
 ```
-                          ┌─────────────────────────────────────┐
-                          │                                     │
-                          ▼                                     │
-┌─────────────────────────────────────────┐                     │
-│  1. User writes "The Plan"              │                     │
-│     (/plan-create + edit plan.md)       │                     │
-└────────────────────┬────────────────────┘                     │
-                     │                                          │
-                     ▼                                          │
-┌─────────────────────────────────────────┐                     │
-│  2. LLM critiques "The Plan"            │◄────────┐           │
-│     (/plan-critique)                    │         │           │
-└────────────────────┬────────────────────┘         │           │
-                     │                              │           │
-                     ▼                              │           │
-┌─────────────────────────────────────────┐         │  Iterate  │
-│  3. User inspects "The Critique"        │         │  until    │
-│     (read critique.md)                  │         │  satisfied│
-└────────────────────┬────────────────────┘         │           │
-                     │                              │           │
-                     ▼                              │           │
-┌─────────────────────────────────────────┐         │           │
-│  4. User improves "The Plan"            │─────────┘           │
-│     (edit plan.md)                      │                     │
-└────────────────────┬────────────────────┘                     │
-                     │                                          │
-                     ▼ Satisfied                                │
-┌─────────────────────────────────────────┐                     │
-│  5. User executes "The Plan"            │                     │
-│     (/plan-execute)                     │                     │
-└────────────────────┬────────────────────┘                     │
-                     │                                          │
-                     ▼                                          │
-┌─────────────────────────────────────────┐                     │
-│  6. User archives "The Plan"            │                     │
-│     (/plan-archive)                     │─────────────────────┘
-└─────────────────────────────────────────┘        New plan
+/plan-create ──► edit plan.md ──► /plan-critique ──► read critique.md
+                      ▲                                     │
+                      └──────── iterate until satisfied ────┘
+                                        │
+                                        ▼
+                              /plan-execute ──► /plan-archive
 ```
 
 ## Install

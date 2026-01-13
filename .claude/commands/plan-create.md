@@ -17,7 +17,8 @@ You are creating a new plan folder for the user.
 
 2. **Ask for the plan name:**
    - Ask the user directly (do NOT offer predefined options): "Enter a name for this plan:"
-   - The user must provide a custom name (non-empty string)
+   - The user must provide a custom name (at least 3 characters)
+   - If the name is less than 3 characters, respond with "Plan name must be at least 3 characters." and ask again
    - Wait for user response
 
 3. **Generate folder name (slug):**
@@ -57,9 +58,7 @@ specifically in the critique and user review phase.
    ╚═════════════════╝
 
    Created new plan: [plansFolder]/[slug]/
-
    Edit your plan at: [plansFolder]/[slug]/plan.md
-
    When ready, run `/plan-critique` to review your plan.
    ```
 

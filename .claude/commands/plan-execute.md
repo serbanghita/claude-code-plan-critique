@@ -54,7 +54,21 @@ You are executing the user's plan that has been iteratively refined.
    The user may have placed SQL queries, text snippets, images, or other
    reference materials that are relevant to execution.
 
-9. **Parse the plan** into discrete, executable steps
+9. **Parse the plan** into discrete, executable steps using this ordering strategy:
+
+   **Step ordering priority:**
+   1. **Independent tasks first**: Identify all changes that have no dependencies on other changes
+   2. **Small to large**: Within independent tasks, order from smallest to largest scope
+   3. **Dependent tasks after**: Once all independent tasks are ordered, add tasks that depend on them
+   4. **Business priority**: For tasks at the same dependency level, prioritize based on business impact
+
+   **Why this order:**
+   - Independent changes can be executed without risk of cascading failures
+   - Small changes build confidence and catch issues early
+   - Dependent changes benefit from the foundation laid by independent ones
+
+   **Example:** If a plan has "Add utility function", "Create database migration", and "Update API endpoint
+   (uses utility)", order as: 1) Add utility function, 2) Create database migration, 3) Update API endpoint
 
 10. **Present the steps** to the user for confirmation:
     ```
@@ -68,6 +82,12 @@ You are executing the user's plan that has been iteratively refined.
 
 11. **Execute each step sequentially:**
     - Before each step, update execution-state.json with current progress
+    - **High-risk operations**: Ask for explicit user permission before executing steps that involve:
+      - Database migrations or schema changes
+      - Deleting files or directories
+      - Modifying configuration files
+      - External API calls with side effects
+      - Any irreversible operations
     - Execute the step
     - Log results to execution-log.md
     - On error: Stop execution, save state, and report the failure

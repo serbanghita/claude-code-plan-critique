@@ -67,7 +67,23 @@ Think hard and critique the plan, code, architecture, system design, design patt
     - **Supporting materials**: Are referenced files in the plan folder
       adequate?
 
-11. **Write the critique** to `[plansFolder]/[selected-plan]/critique.md`
+11. **Context Quarantine** (critical for iterative critique):
+
+    Evaluate whether the plan can be split into independent tasks. If the plan contains multiple features
+    or changes that can be executed separately, strongly recommend splitting it into separate plans.
+
+    **Why this matters:**
+    - Reduces complexity during execution
+    - Limits the context window needed for each plan
+    - Makes critique iterations more focused and actionable
+    - Allows independent tasks to proceed without blocking each other
+
+    **Example:** A plan with "Add user authentication", "Refactor database layer", and "Add caching" should
+    be split into 3 separate plans if these can be implemented independently.
+
+    When suggesting a split, be specific about which sections should become their own plan.
+
+12. **Write the critique** to `[plansFolder]/[selected-plan]/critique.md`
     using this exact format:
 
 ```markdown
@@ -116,12 +132,17 @@ When critiquing, analyze:
 
 ## Important
 
-- Use LSP to find classes, methods, references
-- Add the found issues/observations list in the beginning of the critique.md file as a Table of contents.
-- Always follow the chapters from plan.md as a structure for critique.
-- Add new chapters of critique to the bottom of the critique.md file.
-- Add new subchapters under existing chapters in the critique.md file.
-- Always overwrite the previous critique (do not append)
-- Increment the iteration number from the previous critique
+- Use LSP to find classes, methods, references (mandatory when available; fallback to grep/search tools if unavailable)
+- Add the found issues/observations list in the beginning of the critique.md file as a Table of contents
+- Always follow the chapters from plan.md as a structure for critique
 - Be direct and constructive in feedback
 - Suggest multiple solutions when appropriate
+
+## Iteration Behavior
+
+Each critique iteration completely overwrites the previous critique.md file:
+- **Discard addressed issues**: If an issue from the previous critique has been fixed in plan.md, do not include it
+- **Only include current issues**: The critique should reflect the current state of plan.md
+- **New unrelated observations**: If new issues appear that don't fit under existing plan.md chapters,
+  add them as new chapters at the bottom of the critique
+- **Increment iteration number**: Always increment from the previous critique's iteration number
