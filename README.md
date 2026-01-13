@@ -6,9 +6,50 @@
 +-----------------+
 ```
 
-Slash commands for iterative plan review and execution in Claude Code.
+Slash commands for iterative plan review and execution in Claude Code.  
+Enables you to work with multiple user written plans while keeping a control of the feedback-loop from the LLM.
 
-**Version:** 1.0.0
+## How it works
+
+```
+                          ┌─────────────────────────────────────┐
+                          │                                     │
+                          ▼                                     │
+┌─────────────────────────────────────────┐                     │
+│  1. User writes "The Plan"              │                     │
+│     (/plan-create + edit plan.md)       │                     │
+└────────────────────┬────────────────────┘                     │
+                     │                                          │
+                     ▼                                          │
+┌─────────────────────────────────────────┐                     │
+│  2. LLM critiques "The Plan"            │◄────────┐           │
+│     (/plan-critique)                    │         │           │
+└────────────────────┬────────────────────┘         │           │
+                     │                              │           │
+                     ▼                              │           │
+┌─────────────────────────────────────────┐         │  Iterate  │
+│  3. User inspects "The Critique"        │         │  until    │
+│     (read critique.md)                  │         │  satisfied│
+└────────────────────┬────────────────────┘         │           │
+                     │                              │           │
+                     ▼                              │           │
+┌─────────────────────────────────────────┐         │           │
+│  4. User improves "The Plan"            │─────────┘           │
+│     (edit plan.md)                      │                     │
+└────────────────────┬────────────────────┘                     │
+                     │                                          │
+                     ▼ Satisfied                                │
+┌─────────────────────────────────────────┐                     │
+│  5. User executes "The Plan"            │                     │
+│     (/plan-execute)                     │                     │
+└────────────────────┬────────────────────┘                     │
+                     │                                          │
+                     ▼                                          │
+┌─────────────────────────────────────────┐                     │
+│  6. User archives "The Plan"            │                     │
+│     (/plan-archive)                     │─────────────────────┘
+└─────────────────────────────────────────┘        New plan
+```
 
 ## Install
 
