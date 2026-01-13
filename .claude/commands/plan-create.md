@@ -49,6 +49,11 @@ You are creating a new plan folder for the user.
 Describe what you want to achieve. Be as specific as possible.
 We suggest splitting your specifications by Module, Model, Chapters, Subchapters so they can be addressed
 specifically in the critique and user review phase.
+
+## Chapter 1 (rename this)
+
+Description of what you are trying to achieve.
+
 ```
 
 8. **Respond with confirmation:**

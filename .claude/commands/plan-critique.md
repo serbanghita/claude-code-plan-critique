@@ -84,22 +84,24 @@ Think hard and critique the plan, code, architecture, system design, design patt
     When suggesting a split, be specific about which sections should become their own plan.
 
 12. **Write the critique** to `[plansFolder]/[selected-plan]/critique.md`
-    using this exact format:
+
+    When writing the critique, follow the original chapters from `plan.md`.
+    The goal is to be able to easily override the `plan.md` if the user chooses to merge `critique.md` with `plan.md`
+
+    Use the following format:
 
 ```markdown
 # [Title extracted from first H1 in plan.md, or "Untitled Plan"]
-
-> Keywords: [auto-generated comma-separated keywords based on plan content]
-
+> Keywords: [auto-generated comma-separated keywords based on plan content]  
 Iteration: [number]
 
 ## Summary
 
-[Brief overview of the plan and overall assessment]
+[Brief overview of the plan and overall assessment. Only use bullets, no formatting.]
 
 ---
 
-## [Issue Title]
+## [Plan chapter title or Plan chapter title - specific issue]
 
 **Description:**    
 [Clear, concise summary of the issue]
