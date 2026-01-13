@@ -16,7 +16,8 @@ You are creating a new plan folder for the user.
      - Create an `archived/` subfolder inside it for archived plans
 
 2. **Ask for the plan name:**
-   - Prompt the user: "What would you like to name this plan?"
+   - Ask the user directly (do NOT offer predefined options): "Enter a name for this plan:"
+   - The user must provide a custom name (non-empty string)
    - Wait for user response
 
 3. **Generate folder name (slug):**
