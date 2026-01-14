@@ -67,6 +67,7 @@ only list plan directories.
 Notes:
 
 - When critiquing, always analyze codebase structure (existing files, directories, patterns), Project standards from `CLAUDE.md`, The `README.md` file, dependencies (package.json, requirements.txt, etc.), git state if relevant, whether referenced files/APIs actually exist, supporting files in the plan folder.
+- When doing the writeup of the critique, in the "Description" area make use of the line numbers from `plan.md` file and reference those, so that the user can easily find what text to replace/update.
 - Use LSP to find classes, methods, references (mandatory when available; fallback to grep/search tools if unavailable)
 - Add the found issues/observations list in the beginning of the critique.md file as a Table of contents
 - Always follow the chapters from plan.md as a structure for critique
@@ -95,10 +96,10 @@ Iteration: [number]
 
 ## [Plan chapter title or Plan chapter title - specific issue]
 
-**Description:**    
+Description:    
 [Clear, concise summary of the issue]
 
-**Suggested Solution:**  
+Suggested Solution:    
 [Suggested fix with all pertinent details]
 
     ```[language]
