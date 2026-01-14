@@ -9,11 +9,12 @@ To do this, follow these steps precisely:
 
 1. Read `.claude/plan-critique-config.json` and get `plansFolder` path from settings.
    If the file doesn't exist or `plansFolder` is not set:
-   - Ask the user: "Where would you like to store your plans? Provide a folder path (e.g., `.claude/plans`):"
+   - Ask the user: "Where would you like to store your plans? Provide a folder path (default `.planning`):". 
+     By default, the user should be presented with the option `.planning`.
    - Save the path as `plansFolder` in `.claude/plan-critique-config.json`
    - Create the folder if it doesn't exist
    - Create an `archived/` subfolder inside it
-2. Ask the user directly (do NOT offer predefined options): "Enter a name for this plan:"
+2. Ask the user directly, do not offer predefined options like "New Feature" or "Bug Fix" because the plan name must be unique: "Enter a name for this plan:"
    The user must provide a custom name with at least 3 characters.
    If invalid, respond with "Plan name must be at least 3 characters." and ask again.
 3. Generate a slug from the plan name:
