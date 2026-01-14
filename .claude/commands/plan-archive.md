@@ -1,70 +1,71 @@
-# Plan Archive Command
+---
+allowed-tools: Read, Write, Edit, Glob, AskUserQuestion, Bash(mkdir:*), Bash(cp:*), Bash(mv:*), Bash(rm:*)
+description: Archive a completed or abandoned plan for future reference
+---
 
 You are archiving the user's completed (or abandoned) plan for future reference.
 
-## Instructions
+To do this, follow these steps precisely:
 
-1. **Read settings and get plans folder:**
-   - Read `.claude/plan-critique-config.json`
-   - Get `plansFolder` path from settings
-   - If file doesn't exist or `plansFolder` is not set: Respond with
-     "No plans folder configured. Run `/plan-create` first to set up."
+1. Read `.claude/plan-critique-config.json` and get `plansFolder` path from settings.
+   If the file doesn't exist or `plansFolder` is not set:
+   Respond with "No plans folder configured. Run `/plan-create` first to set up."
+2. Scan `[plansFolder]/` for subdirectories (each subdirectory is a plan).
+   Exclude `archived/` folder and any files, only list plan directories.
+   If no plan folders exist: Respond with "No plans found. Nothing to archive."
+   If `currentPlan` is set and that folder exists, show it as default.
+3. Ask the user to select a plan, present the list of available plans.
+   If only one plan exists, auto-select it and inform user.
+   If there's a current plan, mark it as "(current)".
+   Example:
+   ```
+   Available plans:
+   1. add-user-authentication (current)
+   2. refactor-database-layer
+   3. implement-caching
 
-2. **List available plans:**
-   - Scan `[plansFolder]/` for subdirectories (each subdirectory is a plan)
-   - Exclude `archived/` folder and any files, only list plan directories
-   - If no plan folders exist: Respond with
-     "No plans found. Nothing to archive."
-
-3. **Check for current plan in settings:**
-   - If `currentPlan` is set and that folder exists, show it as default
-
-4. **Ask user to select a plan:**
-   - Present the list of available plans
-   - If there's a current plan, mark it as "(current)"
-   - Example:
-     ```
-     Available plans:
-     1. add-user-authentication (current)
-     2. refactor-database-layer
-     3. implement-caching
-
-     Which plan would you like to archive? [1-3]
-     ```
-   - If only one plan exists, auto-select it and inform user
-
-5. **Check prerequisites:**
-   - If `[plansFolder]/[selected-plan]/plan.md` does not exist or is empty:
-     Respond with "Nothing to archive. Plan file is missing or empty."
-
-6. **Ensure archive directory exists:**
-   - If `[plansFolder]/archived/` does not exist, create it
-
-7. **Extract metadata:**
-   - Read `plan.md` to get the plan title (first H1 heading)
-   - If no title found, use the folder name
+   Which plan would you like to archive? [1-3]
+   ```
+4. Check prerequisites. If `[plansFolder]/[selected-plan]/plan.md` does not exist or is empty:
+   Respond with "Nothing to archive. Plan file is missing or empty."
+5. Ensure `[plansFolder]/archived/` exists, create it if not.
+6. Extract metadata:
+   - Read `plan.md` to get the plan title (first H1 heading). If no title, use folder name.
    - Read `critique.md` to get keywords (if available)
    - Read `execution-log.md` to get execution status (if available)
+7. Generate archive folder name using format: `YYYY-MM-DD_HH-MM-SS_[slug]/`
+   Example: `2026-01-12_14-30-00_add-user-authentication/`
+8. Create the archive folder at `[plansFolder]/archived/[folder-name]/`
+9. Copy contents from `[plansFolder]/[selected-plan]/` to the archive:
+   - Include: `plan.md`, `execution-log.md` (if exists), all other files (SQL, images, etc.)
+   - Exclude: `critique.md`, `execution-state.json`
+10. Create `archive-info.md` in the archive folder using the format in "Archive Info Format" below.
+11. Delete the original plan folder `[plansFolder]/[selected-plan]/` entirely.
+    Update `.claude/plan-critique-config.json` to clear `currentPlan` if it was the archived plan.
+12. Respond with confirmation:
+    ```
+    Plan archived to: [plansFolder]/archived/[folder-name]/
 
-8. **Generate archive folder name:**
-   - Format: `YYYY-MM-DD_HH-MM-SS_[slug]/`
-   - Slug: the plan folder name
-   - Example: `2026-01-12_14-30-00_add-user-authentication/`
+    The original plan folder has been removed.
+    Create a new plan with `/plan-create`.
+    ```
 
-9. **Create the archive folder** at `[plansFolder]/archived/[folder-name]/`
+Notes:
 
-10. **Copy contents from `[plansFolder]/[selected-plan]/` to the archive:**
+- Never include critique.md in the archive (only keywords are preserved in archive-info.md)
+- Always include the full original plan and all supporting files
+- Include execution log only if the plan was executed
+- Use current timestamp for the archive folder name
+- Preserve the original file structure within the archived folder
+- Always delete the original plan folder after archiving
+- It is valid to archive a plan that was never executed (abandoned, reference, or superseded plans).
+  In this case, the execution status will be `NOT_EXECUTED`.
 
-    **Include:**
-    - `plan.md` (the original plan)
-    - `execution-log.md` (if exists)
-    - All other files (SQL queries, text snippets, images, etc.)
+---
 
-    **Exclude:**
-    - `critique.md` (critique content is not archived)
-    - `execution-state.json` (temporary state file)
+## Archive Info Format
 
-11. **Add archive metadata** by creating `archive-info.md` in the archive:
+Write to `[plansFolder]/archived/[folder-name]/archive-info.md`:
 
 ```markdown
 # Archive Info
@@ -79,34 +80,3 @@ You are archiving the user's completed (or abandoned) plan for future reference.
 - plan.md
 - [list other files that were archived]
 ```
-
-12. **Delete the original plan folder:**
-    - Remove `[plansFolder]/[selected-plan]/` entirely
-    - Update `.claude/plan-critique-config.json` to clear `currentPlan` if it was
-      the archived plan
-
-13. **Respond with confirmation:**
-    ```
-    Plan archived to: [plansFolder]/archived/[folder-name]/
-
-    The original plan folder has been removed.
-    Create a new plan with `/plan-create`.
-    ```
-
-## Archive Without Execution
-
-It is valid to archive a plan that was never executed. This is useful for:
-- Abandoned plans
-- Reference plans
-- Plans superseded by other work
-
-In this case, the execution status will be `NOT_EXECUTED`.
-
-## Important
-
-- Never include critique.md in the archive (only keywords are preserved)
-- Always include the full original plan and all supporting files
-- Include execution log only if the plan was executed
-- Use current timestamp for the archive folder name
-- Preserve the original file structure within the archived folder
-- Always delete the original plan folder after archiving

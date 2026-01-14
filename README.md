@@ -1,13 +1,13 @@
 # claude-code-plan-critique
 
 ```
-+-----------------+
-| Plan & Critique |
-+-----------------+
+╔═════════════════╗
+║ Plan & critique ║
+╚═════════════════╝
 ```
 
 Slash commands for iterative plan review and execution in Claude Code.  
-Enables you to work with multiple user written plans while keeping a control of the feedback-loop from the LLM.
+Enables you to work with multiple user written plans while keeping control of the feedback-loop from the LLM.
 
 ## How it works
 
