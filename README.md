@@ -26,7 +26,8 @@ Clone the repository and copy the commands to your project:
 
 ```bash
 git clone https://github.com/serbanghita/claude-code-plan-critique.git && \
-cp -r claude-code-plan-critique/.claude/commands .claude/ && \
+mkdir -p .claude/commands && \
+cp -r claude-code-plan-critique/.claude/commands/* .claude/commands/ && \
 rm -rf claude-code-plan-critique
 ```
 
