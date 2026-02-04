@@ -1,24 +1,9 @@
 # claude-code-plan-critique
+> Plan -> Critique (N times) -> Execute -> Archive
 
-```
-╔═════════════════╗
-║ Plan & critique ║
-╚═════════════════╝
-```
-
-Slash commands for iterative plan review and execution in Claude Code.  
-Enables you to work with multiple user written plans while keeping control of the feedback-loop from the LLM.
-
-## How it works
-
-```
-/plan-create ──► edit plan.md ──► /plan-critique ──► read critique.md
-                      ▲                                     │
-                      └──────── iterate until satisfied ────┘
-                                        │
-                                        ▼
-                              /plan-execute ──► /plan-archive
-```
+Claude Code commands for iterative plan review and execution.  
+Enables you to work with multiple user written plans while keeping control of the feedback-loop from the LLM.  
+See [ghita.org/blog/claude-code-plan-critique](https://ghita.org/blog/claude-code-plan-critique/) for a better explanation of this project.
 
 ## Install
 
@@ -33,6 +18,17 @@ rm -rf claude-code-plan-critique
 
 **Note:** If Claude Code is already running, restart it to load the new commands.
 
+## How it works
+
+```
+/plan-create ──► edit 'plan.md' ──► /plan-critique ──► read 'critique.md', update 'plan.md'
+                      ▲                                     │
+                      └──────── iterate until satisfied ────┘
+                                        │
+                                        ▼
+                              /plan-execute ──► /plan-archive
+```
+
 ## Usage
 
 ### Pre-requisites
@@ -42,24 +38,12 @@ rm -rf claude-code-plan-critique
 
 ### Commands
 
-**`/plan-create`** - Create a new plan. On first run, asks where to store plans. Then asks for the plan name and
-creates a folder with a template.
-
-**`/plan-critique`** - Review your plan. Lists available plans, lets you select one, and generates a critique with
-issues and suggestions.
-
-**`/plan-execute`** - Execute your plan. Parses the plan into steps, asks for confirmation, and runs each step.
+1.  **`/plan-create`** - Create a new plan in `.planning/[plan name]/plan.md`. Asks for the plan name.
+2. **`/plan-critique`** - Claude code reviews your plan. Generates a `critique.md` with issues and suggestions.
+3. User decides which parts of critique are good for the plan and updates `plan.md`. Go back to 2.
+4. **`/plan-execute`** - Execute your plan. Parses the plan into steps, asks for confirmation, and runs each step.
 Supports resume on failure.
-
-**`/plan-archive`** - Archive a completed plan. Moves it to the `archived/` subfolder and deletes the original.
-
-### Workflow
-
-1. Run `/plan-create` and provide a name
-2. Edit the generated `plan.md` file
-3. Run `/plan-critique` and iterate until satisfied
-4. Run `/plan-execute` to implement
-5. Run `/plan-archive` to clean up
+5. **`/plan-archive`** - Archive a completed plan. Moves it to the `.planning/archived/[plan name]` subfolder and deletes the original.
 
 ## Credits
 
