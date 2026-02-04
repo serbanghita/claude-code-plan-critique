@@ -76,6 +76,7 @@ Notes:
 - Be explicit about what changes are being made at each step
 - If resuming, skip already-completed steps
 - Reference any supporting files in the plan folder as needed during execution
+- If there's any functional or architectural change that needs to be mentioned or updated in the project's `CLAUDE.md` file, ask the user for acknowledgement after the plan has been executed giving a very brief summary of changes.
 
 ---
 
