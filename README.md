@@ -38,12 +38,32 @@ rm -rf claude-code-plan-critique
 
 ### Commands
 
-1.  **`/plan-create`** - Create a new plan in `.planning/[plan name]/plan.md`. Asks for the plan name.
-2. **`/plan-critique`** - Claude code reviews your plan. Generates a `critique.md` with issues and suggestions.
+1. `/plan-create` - Create a new plan in `.planning/[plan name]/plan.md`. Asks for the plan name.
+2. `/plan-critique` - Claude Code reviews your plan. Generates a `critique.md` with issues and suggestions.
 3. User decides which parts of critique are good for the plan and updates `plan.md`. Go back to 2.
-4. **`/plan-execute`** - Execute your plan. Parses the plan into steps, asks for confirmation, and runs each step.
-Supports resume on failure.
-5. **`/plan-archive`** - Archive a completed plan. Moves it to the `.planning/archived/[plan name]` subfolder and deletes the original.
+4. `/plan-execute` - Execute your plan. Parses the plan into steps, asks for confirmation, and runs each step. Supports resume on failure.
+5. `/plan-archive` - Archive a completed plan. Moves it to `.planning/archived/` and deletes the original.
+
+### Parallel Plans
+
+You can work on multiple plans simultaneously in separate terminals. Each Claude Code session tracks its own
+current plan via session files in `.planning/.sessions/`.
+
+Example workflow with two terminals:
+
+```
+Terminal 1                          Terminal 2
+──────────────────────────────────  ──────────────────────────────────
+/plan-create "Add Authentication"   /plan-create "Fix Database Bug"
+edit plan.md                        edit plan.md
+/plan-critique                      /plan-critique
+...                                 ...
+```
+
+Each terminal remembers which plan it's working on. When you run `/plan-critique` or `/plan-execute`, your
+session's plan is marked as "(current session)" in the selection list.
+
+Add `.planning/.sessions/` to your `.gitignore` - these are local session files that should not be committed.
 
 ## Credits
 

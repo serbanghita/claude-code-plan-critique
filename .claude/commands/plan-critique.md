@@ -1,5 +1,5 @@
 ---
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, LSP, Bash(git status:*), Bash(git log:*), Bash(git diff:*)
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, LSP, Bash(git status:*), Bash(git log:*), Bash(git diff:*), Bash(echo $PPID), Bash(kill -0:*), Bash(rm:*), Bash(mkdir:*)
 description: Critique the user's plan from plan.md
 disable-model-invocation: true
 ---
@@ -11,32 +11,38 @@ Always use the top model to guide your review.
 
 To do this, follow these steps precisely:
 
-1. Read `.claude/plan-critique-config.json`, get `plansFolder` path from settings. If the file doesn't exist or `plansFolder` is not set: Respond with "No plans folder configured. Run `/plan-create` first to set up."
-2. Scan `[plansFolder]/` for subdirectories (each subdirectory is a plan). Exclude `archived/` folder and any files,
-only list plan directories. 
+1. Read `.claude/plan-critique-config.json`, get `plansFolder` path from settings. If the file doesn't exist or
+   `plansFolder` is not set: Respond with "No plans folder configured. Run `/plan-create` first to set up."
+2. Get the Claude Code process ID by running: `echo $PPID`. Store this as `sessionPID`.
+3. Clean up stale sessions: Scan `[plansFolder]/.sessions/` for files. For each file named with a PID, check if that
+   process is still running via `kill -0 [PID] 2>/dev/null`. If the command fails (process not running), delete that
+   session file. This is non-blocking cleanup.
+4. Read the current session's plan from `[plansFolder]/.sessions/[sessionPID]` if it exists. Store as `sessionPlan`.
+5. Scan `[plansFolder]/` for subdirectories (each subdirectory is a plan). Exclude `archived/` and `.sessions/`
+   folders and any files, only list plan directories.
    If no plan folders exist: Respond with "No plans found. Create one with `/plan-create`".
-   If `currentPlan` is set and that folder exists, show it as default.
-3. Ask the user to select a plan, present the list of available plans.
+6. Ask the user to select a plan, present the list of available plans.
    If only one plan exists, auto-select it and inform user.
-   If there's a current plan, mark it as "(current)"
+   If `sessionPlan` matches a plan folder, mark it as "(current session)".
    Example:
      ```
      Available plans:
-     1. add-user-authentication (current)
+     1. add-user-authentication (current session)
      2. refactor-database-layer
      3. implement-caching
 
      Which plan would you like to critique? [1-3]
      ```
-4. Update `.claude/plan-critique-config.json` to set `currentPlan` to the selected plan slug. Preserve all other settings.
-5. Read the plan file at `[plansFolder]/[selected-plan]/plan.md`
-6. Check for errors:
+7. Update the session file `[plansFolder]/.sessions/[sessionPID]` with the selected plan slug (create if needed).
+8. Read the plan file at `[plansFolder]/[selected-plan]/plan.md`
+9. Check for errors:
    - If `plan.md` is empty: Respond with "Plan file is empty. Edit `[plansFolder]/[selected-plan]/plan.md`"
    - If `CLAUDE.md` does not exist in project root: Respond with "Create a `CLAUDE.md` file in the root of your project."
-7. Read the existing "Iteration: [number]" at `[plansFolder]/[selected-plan]/critique.md` (if it exists) and determine the current iteration number.
-   If no critique exists, this is iteration 1.
-8. If the plan references files that are in the `[plansFolder]/[selected-plan]/` folder, review those as well and add them to the context of the critique.
-9. Perform a thorough critique of the plan considering:
+10. Read the existing "Iteration: [number]" at `[plansFolder]/[selected-plan]/critique.md` (if it exists) and
+    determine the current iteration number. If no critique exists, this is iteration 1.
+11. If the plan references files that are in the `[plansFolder]/[selected-plan]/` folder, review those as well and
+    add them to the context of the critique.
+12. Perform a thorough critique of the plan considering:
     - Clarity: Are requirements specific and unambiguous?
     - Completeness: Are all necessary steps included?
     - Order: Are dependencies between steps correctly sequenced?
@@ -46,7 +52,7 @@ only list plan directories.
     - Scope: Is scope reasonable? Any unnecessary additions?
     - Testability: How will success be verified?
     - Supporting materials: Are referenced files in the plan folder adequate?
-10. Evaluate whether the plan can be split into independent tasks. If the plan contains multiple features
+13. Evaluate whether the plan can be split into independent tasks. If the plan contains multiple features
     or changes that can be executed separately, strongly recommend splitting it into separate plans.
     Why this matters:
     - Reduces complexity during execution
@@ -58,7 +64,7 @@ only list plan directories.
     be split into three separate plans if these can be implemented independently.
 
     When suggesting a split, be specific about which sections should become their own plan.
-11. Write the critique to `[plansFolder]/[selected-plan]/critique.md`.
+14. Write the critique to `[plansFolder]/[selected-plan]/critique.md`.
     When writing the critique, follow the original chapters from `plan.md`.
     The goal is to be able to easily override the `plan.md` if the user chooses to merge `critique.md` with `plan.md`
 

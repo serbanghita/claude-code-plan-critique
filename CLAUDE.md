@@ -4,6 +4,15 @@ This project provides slash commands for Claude Code that enable users to run fo
 `/plan-create`, `/plan-critique`, `/plan-execute`, and `/plan-archive`.
 These commands help create, review, execute, and archive plans written by the user with Claude Code.
 
+## Architecture
+
+Session tracking for parallel plans:
+- Each Claude Code session tracks its current plan via `.planning/.sessions/[PID]` where PID is the Claude Code
+  process ID obtained via `echo $PPID`.
+- Commands read the session file to determine the current plan and show it as "(current session)" in selection.
+- Stale session files (PIDs no longer running) are cleaned up opportunistically via `kill -0 [PID]` checks.
+- The `.sessions/` directory is local state and should be gitignored.
+
 ## Code Style
 
 - The commands markdown files from `commands` folder should have a word wrap of maximum 120 characters.
@@ -13,6 +22,16 @@ These commands help create, review, execute, and archive plans written by the us
 - The text from the commands markdown files should be written in plain English and easy to read from a text editor
   even if markdown support is not available.
 - Never use emojis in the markdown text.
+
+## Versioning and Releases
+
+- The canonical version lives in the `VERSION` file at the project root (plain text, e.g. `1.0.0`).
+- Follow semver: MAJOR for breaking changes, MINOR for new features, PATCH for fixes.
+- Every release must update three things:
+  1. `VERSION` file with the new version number
+  2. `CHANGELOG.md` with a new section describing the changes
+  3. A git tag in the format `v[VERSION]` (e.g. `v1.0.0`)
+- The `/plan-create` command reads `VERSION` and displays it in a banner at the start of each session.
 
 ## Documentation
 

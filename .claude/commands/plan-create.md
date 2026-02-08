@@ -1,5 +1,5 @@
 ---
-allowed-tools: Read, Write, Edit, Glob, AskUserQuestion, Bash(mkdir:*)
+allowed-tools: Read, Write, Edit, Glob, AskUserQuestion, Bash(mkdir:*), Bash(echo $PPID), Bash(rm:*)
 description: Create a new plan folder with a plan.md template
 ---
 
@@ -7,29 +7,39 @@ You are creating a new plan folder for the user.
 
 To do this, follow these steps precisely:
 
-1. Read `.claude/plan-critique-config.json` and get `plansFolder` path from settings.
+1. Read the `VERSION` file from the project root. Display the following banner before doing anything else,
+   replacing `[version]` with the contents of the VERSION file:
+   ```
+   +-------------------------------------------------+
+   |  Plan Critique v[version] - Creating new plan   |
+   +-------------------------------------------------+
+   ```
+2. Read `.claude/plan-critique-config.json` and get `plansFolder` path from settings.
    If the file doesn't exist or `plansFolder` is not set:
    - Ask the user: "Where would you like to store your plans? Provide a folder path (default `.planning`):". 
      By default, the user should be presented with the option `.planning`.
    - Save the path as `plansFolder` in `.claude/plan-critique-config.json`
    - Create the folder if it doesn't exist
    - Create an `archived/` subfolder inside it
-2. Ask the user directly, do not offer predefined options like "New Feature" or "Bug Fix" because the plan name must be unique: "Enter a name for this plan:"
+3. Ask the user directly, do not offer predefined options like "New Feature" or "Bug Fix" because the plan name must be unique: "Enter a name for this plan:"
    The user must provide a custom name with at least 3 characters.
    If invalid, respond with "Plan name must be at least 3 characters." and ask again.
-3. Generate a slug from the plan name:
+4. Generate a slug from the plan name:
    - Convert to lowercase
    - Replace spaces with hyphens
    - Remove characters that are not alphanumeric or hyphens
    - Trim to max 50 characters
    - Example: "Add User Authentication" becomes `add-user-authentication`
-4. Check if `[plansFolder]/[slug]/` already exists.
+5. Check if `[plansFolder]/[slug]/` already exists.
    If it does: Respond with "A plan with this name already exists at `[plansFolder]/[slug]/`. Choose a different name."
-   Ask for a new name and repeat from step 3.
-5. Create directory `[plansFolder]/[slug]/`
-6. Update `.claude/plan-critique-config.json` to set `currentPlan` to the new slug. Preserve all other settings.
-7. Create the plan template at `[plansFolder]/[slug]/plan.md` using the format in "Plan Template" section below.
-8. Respond with confirmation:
+   Ask for a new name and repeat from step 4.
+6. Create directory `[plansFolder]/[slug]/`
+7. Link this session to the new plan:
+   - Get the Claude Code process ID by running: `echo $PPID`
+   - Create the sessions directory if needed: `[plansFolder]/.sessions/`
+   - Write the slug to `[plansFolder]/.sessions/[PID]` (plain text, just the slug)
+8. Create the plan template at `[plansFolder]/[slug]/plan.md` using the format in "Plan Template" section below.
+9. Respond with confirmation:
    ```
    Created new plan: [plansFolder]/[slug]/
    Edit your plan at: [plansFolder]/[slug]/plan.md
