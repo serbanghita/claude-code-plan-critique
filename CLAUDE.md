@@ -25,13 +25,13 @@ Session tracking for parallel plans:
 
 ## Versioning and Releases
 
-- The canonical version lives in the `VERSION` file at the project root (plain text, e.g. `1.0.0`).
+- The canonical version lives in `.claude-plugin/plugin.json` under the `version` field.
 - Follow semver: MAJOR for breaking changes, MINOR for new features, PATCH for fixes.
-- Every release must update three things:
-  1. `VERSION` file with the new version number
-  2. `CHANGELOG.md` with a new section describing the changes
-  3. A git tag in the format `v[VERSION]` (e.g. `v1.0.0`)
-- The `/plan-create` command reads `VERSION` and displays it in a banner at the start of each session.
+- Every release must update four things:
+  1. `version` field in `.claude-plugin/plugin.json`
+  2. The hardcoded version in the banner inside `.claude/commands/plan-create.md`
+  3. `CHANGELOG.md` with a new section describing the changes
+  4. A git tag in the format `v[VERSION]` (e.g. `v1.0.0`)
 
 ## Documentation
 

@@ -7,11 +7,10 @@ You are creating a new plan folder for the user.
 
 To do this, follow these steps precisely:
 
-1. Read the `VERSION` file from the project root. Display the following banner before doing anything else,
-   replacing `[version]` with the contents of the VERSION file:
+1. Display the following banner before doing anything else:
    ```
    +-------------------------------------------------+
-   |  Plan Critique v[version] - Creating new plan   |
+   |  Plan Critique v1.0.0 - Creating new plan       |
    +-------------------------------------------------+
    ```
 2. Read `.claude/plan-critique-config.json` and get `plansFolder` path from settings.
