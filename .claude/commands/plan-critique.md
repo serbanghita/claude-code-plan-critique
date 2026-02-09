@@ -1,5 +1,5 @@
 ---
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, LSP, Bash(git status:*), Bash(git log:*), Bash(git diff:*), Bash(echo $PPID), Bash(kill -0:*), Bash(rm:*), Bash(mkdir:*)
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, mcp__ide__getDiagnostics, Bash(git status:*), Bash(git log:*), Bash(git diff:*), Bash(echo $PPID), Bash(kill -0:*), Bash(rm:*), Bash(mkdir:*)
 description: Critique the user's plan from plan.md
 disable-model-invocation: true
 ---
@@ -38,11 +38,21 @@ To do this, follow these steps precisely:
 9. Check for errors:
    - If `plan.md` is empty: Respond with "Plan file is empty. Edit `[plansFolder]/[selected-plan]/plan.md`"
    - If `CLAUDE.md` does not exist in project root: Respond with "Create a `CLAUDE.md` file in the root of your project."
-10. Read the existing "Iteration: [number]" at `[plansFolder]/[selected-plan]/critique.md` (if it exists) and
+10. Detect project languages and check for LSP support:
+    - Use Glob to check for TypeScript indicators: `tsconfig.json`, `*.ts`, or `*.tsx` files in the project
+    - Use Glob to check for PHP indicators: `composer.json` or `*.php` files in the project
+    - If TypeScript files are detected, inform the user:
+      "This project uses TypeScript. For better code intelligence during critique, enable the
+      `typescript-lsp` plugin (claude-plugins-official). Check with the `/plugins` command."
+    - If PHP files are detected, inform the user:
+      "This project uses PHP. For better code intelligence during critique, enable the
+      `php-lsp` plugin (claude-plugins-official). Check with the `/plugins` command."
+    - This is informational only, do not block the critique.
+11. Read the existing "Iteration: [number]" at `[plansFolder]/[selected-plan]/critique.md` (if it exists) and
     determine the current iteration number. If no critique exists, this is iteration 1.
-11. If the plan references files that are in the `[plansFolder]/[selected-plan]/` folder, review those as well and
+12. If the plan references files that are in the `[plansFolder]/[selected-plan]/` folder, review those as well and
     add them to the context of the critique.
-12. Perform a thorough critique of the plan considering:
+13. Perform a thorough critique of the plan considering:
     - Clarity: Are requirements specific and unambiguous?
     - Completeness: Are all necessary steps included?
     - Order: Are dependencies between steps correctly sequenced?
@@ -52,7 +62,7 @@ To do this, follow these steps precisely:
     - Scope: Is scope reasonable? Any unnecessary additions?
     - Testability: How will success be verified?
     - Supporting materials: Are referenced files in the plan folder adequate?
-13. Evaluate whether the plan can be split into independent tasks. If the plan contains multiple features
+14. Evaluate whether the plan can be split into independent tasks. If the plan contains multiple features
     or changes that can be executed separately, strongly recommend splitting it into separate plans.
     Why this matters:
     - Reduces complexity during execution
@@ -64,7 +74,7 @@ To do this, follow these steps precisely:
     be split into three separate plans if these can be implemented independently.
 
     When suggesting a split, be specific about which sections should become their own plan.
-14. Write the critique to `[plansFolder]/[selected-plan]/critique.md`.
+15. Write the critique to `[plansFolder]/[selected-plan]/critique.md`.
     When writing the critique, follow the original chapters from `plan.md`.
     The goal is to be able to easily override the `plan.md` if the user chooses to merge `critique.md` with `plan.md`
 
@@ -74,7 +84,12 @@ Notes:
 
 - When critiquing, always analyze codebase structure (existing files, directories, patterns), Project standards from `CLAUDE.md`, The `README.md` file, dependencies (package.json, requirements.txt, etc.), git state if relevant, whether referenced files/APIs actually exist, supporting files in the plan folder.
 - When doing the writeup of the critique, in the "Description" area make use of the line numbers from `plan.md` file and reference those, so that the user can easily find what text to replace/update.
-- Use LSP to find classes, methods, references (mandatory when available; fallback to grep/search tools if unavailable)
+- Use code intelligence to verify the plan against the actual codebase:
+  - Verify types exist: use LSP go-to-definition when an LSP plugin is enabled, fall back to Grep for `class`, `interface`, `type`, or `struct` definitions
+  - Check method/function existence: use LSP go-to-definition, fall back to Grep for `function`/`def`/`fn` declarations in the target file
+  - Find usages/references: use LSP find-references, fall back to Grep for the symbol name across the codebase
+  - Review diagnostics: use `mcp__ide__getDiagnostics` to pull current errors/warnings from the IDE for files referenced in the plan
+  - Verify file paths exist with Glob before referencing them in the critique
 - Add the found issues/observations list in the beginning of the critique.md file as a Table of contents
 - Always follow the chapters from plan.md as a structure for critique
 - Be direct and constructive in feedback
