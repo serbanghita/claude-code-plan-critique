@@ -18,18 +18,20 @@ To do this, follow these steps precisely:
 5. Scan `[plansFolder]/` for subdirectories (each subdirectory is a plan).
    Exclude `archived/` and `.sessions/` folders and any files, only list plan directories.
    If no plan folders exist: Respond with "No plans found. Create one with `/plan-create`".
-6. Ask the user to select a plan, present the list of available plans.
-   If only one plan exists, auto-select it and inform user.
-   If `sessionPlan` matches a plan folder, mark it as "(current session)".
-   Example:
-   ```
-   Available plans:
-   1. add-user-authentication (current session)
-   2. refactor-database-layer
-   3. implement-caching
+6. Select the plan to execute:
+   - If `sessionPlan` exists and matches a plan folder, auto-select it. Inform the user:
+     "Using current session plan: [sessionPlan]"
+   - Else if only one plan exists, auto-select it and inform user.
+   - Otherwise, ask the user to select a plan from the list.
+     Example:
+     ```
+     Available plans:
+     1. add-user-authentication
+     2. refactor-database-layer
+     3. implement-caching
 
-   Which plan would you like to execute? [1-3]
-   ```
+     Which plan would you like to execute? [1-3]
+     ```
 7. Update the session file `[plansFolder]/.sessions/[sessionPID]` with the selected plan slug (create if needed).
 8. Check prerequisites:
    - If `[plansFolder]/[selected-plan]/plan.md` does not exist: Respond with "No plan.md found."
