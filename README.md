@@ -5,6 +5,19 @@ Claude Code commands for iterative plan review and execution.
 Enables you to work with multiple user written plans while keeping control of the feedback-loop from the LLM.  
 See [ghita.org/blog/claude-code-plan-critique](https://ghita.org/blog/claude-code-plan-critique/) for a better explanation of this project.
 
+## How is this different from plan mode?
+
+Claude Code has a built-in plan mode where Claude writes the plan and you approve or reject it.  
+This plugin inverts that: you write the plan, Claude critiques it, and you decide which feedback
+to accept. The critique loop can run as many times as you want.
+
+It is slower by design. You read each critique, cherry-pick changes, and iterate until the plan
+is yours — not Claude's interpretation of what you asked for. This is micro-management on purpose.
+
+Plan mode is great when you trust Claude to drive. This plugin is for when you want to drive and
+use Claude as a reviewer. The plans are persistent files you own, they can be archived for future
+reference, and you can work on multiple plans in parallel across terminals.
+
 ## Install
 
 Clone the repository and copy the commands to your project:
