@@ -4,6 +4,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-03-26
+
+### Added
+- Critique context: `/plan-execute` now reads `critique.md` as supplementary context during execution,
+  carrying forward implementation hints, risk warnings, and alternative approaches from the critique phase.
+- Plan readiness check: warns if a plan has not been critiqued before execution, with option to proceed.
+- Git integration: per-step commits with rollback capability. After each step, offers to commit changes
+  with a `plan-execute:` prefixed message. Tracks commit hashes in execution state for `git revert`.
+- Post-step verification: runs `mcp__ide__getDiagnostics` on modified files after each step to catch
+  new errors early. Advisory only, does not block execution.
+- Error recovery options: on failure, presents four choices instead of just stopping: fix and retry,
+  skip step, rollback via git revert, or stop execution.
+- CLAUDE.md context: reads project standards at the start of execution and enforces compliance.
+- Dependency graph: step presentation now shows inferred dependencies between steps and estimated
+  file impact per step, with option for the user to reorder before execution begins.
+- Supporting file classification: supporting files are classified by type and purpose, presented to
+  the user for confirmation before execution.
+- Step-level timing and file tracking in execution log.
+- Context window warning for plans exceeding 10 steps.
+
+### Changed
+- Resume flow: on resume, verifies git state matches execution state. On restart, explicitly
+  overwrites execution-log.md and notes the restart.
+- Execution state format: added `skippedSteps`, `stepStartedAt`, `gitAvailable`, and `gitCommits`
+  fields to `execution-state.json`.
+- Execution log format: added `Duration` and `Files changed` fields per step, `Git commits` in
+  summary. Failed steps now include verbatim error output.
+
 ## [1.1.0] - 2026-02-16
 
 ### Changed
