@@ -1,0 +1,14 @@
+{
+  "name": "serbanghita",
+  "owner": {
+    "name": "Serban Ghita",
+    "url": "https://github.com/serbanghita"
+  },
+  "plugins": [
+    {
+      "name": "plan-critique",
+      "source": "./",
+      "description": "Iterative plan review and execution workflow for Claude Code"
+    }
+  ]
+}

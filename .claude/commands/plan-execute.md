@@ -1,6 +1,7 @@
 ---
-allowed-tools: Read, Write, Edit, Glob, Grep, AskUserQuestion, LSP, mcp__ide__getDiagnostics, Bash, Bash(echo $PPID), Bash(kill -0:*), Bash(rm:*)
+allowed-tools: Read, Write, Edit, Glob, Grep, AskUserQuestion, LSP, mcp__ide__getDiagnostics, Bash
 description: Execute the user's plan that has been iteratively refined
+disable-model-invocation: true
 ---
 
 You are executing the user's plan that has been iteratively refined.

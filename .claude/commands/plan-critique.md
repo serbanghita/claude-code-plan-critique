@@ -1,13 +1,13 @@
 ---
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, mcp__ide__getDiagnostics, Bash(git status:*), Bash(git log:*), Bash(git diff:*), Bash(echo $PPID), Bash(kill -0:*), Bash(rm:*), Bash(mkdir:*)
+allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, LSP, mcp__ide__getDiagnostics, Bash(git status:*), Bash(git log:*), Bash(git diff:*), Bash(echo $PPID), Bash(kill -0:*), Bash(rm:*), Bash(mkdir:*)
 description: Critique the user's plan from plan.md
 disable-model-invocation: true
+model: opus
+effort: high
 ---
 
 You are performing an iterative review of the user's execution plan.
-Think hard and critique the plan, code, architecture, system design, design patterns.
-
-Always use the top model to guide your review.
+Critique the plan, code, architecture, system design, and design patterns.
 
 To do this, follow these steps precisely:
 

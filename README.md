@@ -20,6 +20,17 @@ reference, and you can work on multiple plans in parallel across terminals.
 
 ## Install
 
+### Marketplace installation (recommended)
+
+Add the marketplace and install the plugin from within Claude Code:
+
+```
+/plugin marketplace add serbanghita/claude-code-plan-critique
+/plugin install plan-critique@serbanghita
+```
+
+### Manual installation via git clone
+
 Clone the repository and copy the commands to your project:
 
 ```bash
@@ -29,7 +40,7 @@ cp -r claude-code-plan-critique/.claude/commands/* .claude/commands/ && \
 rm -rf claude-code-plan-critique
 ```
 
-**Note:** If Claude Code is already running, restart it to load the new commands.
+If Claude Code is already running, restart it to load the new commands.
 
 ## How it works
 

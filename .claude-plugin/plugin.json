@@ -1,7 +1,7 @@
 {
   "name": "plan-critique",
   "displayName": "Plan & Critique",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Iterative plan review and execution workflow for Claude Code",
   "author": {
     "name": "Serban Ghita",
@@ -28,5 +28,5 @@
       "description": "Archive a completed plan"
     }
   ],
-  "minClaudeCodeVersion": "1.0.0"
+  "minClaudeCodeVersion": "2.1.0"
 }

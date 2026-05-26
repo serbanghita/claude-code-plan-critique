@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-05-26
+
+### Added
+- Marketplace installation: added `.claude-plugin/marketplace.json` and a "Marketplace installation
+  (recommended)" section in the README, enabling install via `/plugin install plan-critique@serbanghita`.
+- `/plan-critique` now pins `model: opus` and `effort: high` via frontmatter, so reviews always run on the
+  top model with deep reasoning. This replaces prose directives ("Think hard", "Always use the top model")
+  that had no effect on model or reasoning selection.
+- `LSP` added to `/plan-critique` allowed-tools so the go-to-definition and find-references steps the command
+  already describes can run without a permission prompt.
+
+### Changed
+- `/plan-execute` and `/plan-archive` now set `disable-model-invocation: true`. These stateful commands run
+  only when the user invokes them and are never auto-triggered by the model.
+- `/plan-execute` allowed-tools cleaned up: removed redundant scoped `Bash(...)` entries already covered by
+  the broad `Bash` permission that plan execution requires.
+- Raised `minClaudeCodeVersion` to `2.1.0`, the baseline for the command/skill frontmatter features the plugin
+  now relies on (`model`/`effort`, `disable-model-invocation`).
+
 ## [1.2.0] - 2026-03-26
 
 ### Added
