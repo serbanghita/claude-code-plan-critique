@@ -36,9 +36,6 @@ Installed as a plugin, the skills are namespaced under the plugin name `plan`:
 
 ### Skills
 
-Marketplace installs use the namespaced form below. Manual installs use the bare form
-(`/create`, `/critique`, `/execute`, `/archive`).
-
 1. `/plan:create` - Create a new plan in `.planning/[plan name]/plan.md`. Accepts the plan name as an argument.
 2. `/plan:critique` - Claude Code reviews your plan. Generates a `critique.md` with issues and suggestions.
 3. User decides which parts of critique are good for the plan and updates `plan.md`. Go back to 2.
