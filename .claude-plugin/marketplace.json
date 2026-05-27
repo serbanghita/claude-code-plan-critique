@@ -1,5 +1,6 @@
 {
   "name": "serbanghita",
+  "description": "Claude Code plugins by Serban Ghita, including the Plan & Critique planning workflow.",
   "owner": {
     "name": "Serban Ghita",
     "url": "https://github.com/serbanghita"
