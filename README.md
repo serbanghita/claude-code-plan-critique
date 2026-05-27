@@ -1,26 +1,10 @@
 # claude-code-plan-critique
-> Plan -> Critique (N times) -> Execute -> Archive
+> Plan → Critique (iterate) → Execute → Archive
 
-Claude Code skills for iterative plan review and execution.  
-Enables you to work with multiple user written plans while keeping control of the feedback-loop from the LLM.  
-See [ghita.org/blog/claude-code-plan-critique](https://ghita.org/blog/claude-code-plan-critique/) for a better explanation of this project.
-
-## How is this different from plan mode?
-
-Claude Code has a built-in plan mode where Claude writes the plan and you approve or reject it.  
-This plugin inverts that: you write the plan, Claude critiques it, and you decide which feedback
-to accept. The critique loop can run as many times as you want.
-
-It is slower by design. You read each critique, cherry-pick changes, and iterate until the plan
-is yours — not Claude's interpretation of what you asked for. This is micro-management on purpose.
-
-Plan mode is great when you trust Claude to drive. This plugin is for when you want to drive and
-use Claude as a reviewer. The plans are persistent files you own, they can be archived for future
-reference, and you can work on multiple plans in parallel across terminals.
+Claude Code skills for iterative plan review and execution. They enable you to work with multiple
+written plans while keeping full control of the feedback-loop from the LLM.
 
 ## Install
-
-### Marketplace installation (recommended)
 
 Add the marketplace and install the plugin from within Claude Code:
 
@@ -31,25 +15,6 @@ Add the marketplace and install the plugin from within Claude Code:
 
 Installed as a plugin, the skills are namespaced under the plugin name `plan`:
 `/plan:create`, `/plan:critique`, `/plan:execute`, `/plan:archive`.
-
-### Manual installation via git clone
-
-Clone the repository and copy the skills to your project:
-
-```bash
-git clone https://github.com/serbanghita/claude-code-plan-critique.git && \
-mkdir -p .claude/skills && \
-cp -r claude-code-plan-critique/skills/* .claude/skills/ && \
-rm -rf claude-code-plan-critique
-```
-
-Installed manually, the skills are invoked without a namespace:
-`/create`, `/critique`, `/execute`, `/archive`. These bare names are generic, so prefer the
-marketplace install if you run other skills with the same names.
-
-If you upgraded from a previous manual install, delete the old `.claude/commands/plan-*.md` files.
-
-If Claude Code is already running, restart it to load the new skills.
 
 ## How it works
 
@@ -100,6 +65,58 @@ Each terminal remembers which plan it's working on. When you run `/plan:critique
 session's plan is marked as "(current session)" in the selection list.
 
 Add `.planning/.sessions/` to your `.gitignore` - these are local session files that should not be committed.
+
+## How is this different from built-in plan mode?
+
+Claude Code has a built-in plan mode where Claude writes the plan and you approve or reject it.  
+This plugin inverts that: you write the plan, Claude critiques it, and you decide which feedback
+to accept. The critique loop can run as many times as you want.
+
+It is slower by design. You read each critique, cherry-pick changes, and iterate until the plan
+is yours — not Claude's interpretation of what you asked for. This is micro-management on purpose.
+
+Plan mode is great when you trust Claude to drive. This plugin is for when you want to drive and
+use Claude as a reviewer. The plans are persistent files you own, they can be archived for future
+reference, and you can work on multiple plans in parallel across terminals.
+
+See [ghita.org/blog/claude-code-plan-critique](https://ghita.org/blog/claude-code-plan-critique/) for a better explanation.
+
+## Costs
+
+Token cost of the skills as reported by `claude plugin details plan@serbanghita`. Always-on is the
+fixed cost added to every session just for having the plugin enabled (the skill descriptions).
+On-invoke is paid only when a skill runs, when its `SKILL.md` body loads; the linked format files
+load on demand within a skill. Numbers are rounded estimates, not exact billing (`1k` is about 1000
+tokens).
+
+| Skill    | Always-on | On-invoke |
+| -------- | --------- | --------- |
+| create   | ~20       | ~950      |
+| critique | <20       | ~2.4k     |
+| execute  | ~30       | ~3.4k     |
+| archive  | ~30       | ~1.3k     |
+
+Always-on total: ~95 tokens added to every session. On-invoke cost is paid each time that skill
+fires, so one full plan -> critique -> execute -> archive cycle pays each skill's on-invoke cost once.
+
+## Contribute
+
+Clone the repository and copy the skills to your project:
+
+```bash
+git clone https://github.com/serbanghita/claude-code-plan-critique.git && \
+mkdir -p .claude/skills && \
+cp -r claude-code-plan-critique/skills/* .claude/skills/ && \
+rm -rf claude-code-plan-critique
+```
+
+Installed manually, the skills are invoked without a namespace:
+`/create`, `/critique`, `/execute`, `/archive`. These bare names are generic, so prefer the
+marketplace install if you run other skills with the same names.
+
+If you upgraded from a previous manual install, delete the old `.claude/commands/plan-*.md` files.
+
+If Claude Code is already running, restart it to load the new skills.
 
 ## Credits
 
