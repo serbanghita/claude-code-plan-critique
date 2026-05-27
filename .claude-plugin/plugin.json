@@ -1,7 +1,7 @@
 {
-  "name": "plan-critique",
+  "name": "plan",
   "displayName": "Plan & Critique",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "Iterative plan review and execution workflow for Claude Code",
   "author": {
     "name": "Serban Ghita",
@@ -10,23 +10,5 @@
   "repository": "https://github.com/serbanghita/claude-code-plan-critique",
   "license": "MIT",
   "keywords": ["planning", "critique", "workflow", "review", "execution"],
-  "commands": [
-    {
-      "name": "plan-create",
-      "description": "Create a new plan from template"
-    },
-    {
-      "name": "plan-critique",
-      "description": "Review and critique an existing plan"
-    },
-    {
-      "name": "plan-execute",
-      "description": "Execute plan steps with confirmation"
-    },
-    {
-      "name": "plan-archive",
-      "description": "Archive a completed plan"
-    }
-  ],
   "minClaudeCodeVersion": "2.1.0"
 }

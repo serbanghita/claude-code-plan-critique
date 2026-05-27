@@ -10,7 +10,7 @@ To do this, follow these steps precisely:
 
 1. Read `.claude/plan-critique-config.json` and get `plansFolder` path from settings.
    If the file doesn't exist or `plansFolder` is not set:
-   Respond with "No plans folder configured. Run `/plan-create` first to set up."
+   Respond with "No plans folder configured. Run `/plan:create` first to set up."
 2. Get the Claude Code process ID by running: `echo $PPID`. Store this as `sessionPID`.
 3. Clean up stale sessions: Scan `[plansFolder]/.sessions/` for files. For each file named with a PID, check if that
    process is still running via `kill -0 [PID] 2>/dev/null`. If the command fails (process not running), delete that
@@ -46,7 +46,8 @@ To do this, follow these steps precisely:
 12. Copy contents from `[plansFolder]/[selected-plan]/` to the archive:
     - Include: `plan.md`, `execution-log.md` (if exists), all other files (SQL, images, etc.)
     - Exclude: `critique.md`, `execution-state.json`
-13. Create `archive-info.md` in the archive folder using the format in "Archive Info Format" below.
+13. Create `archive-info.md` in the archive folder using the format in
+    [archive-info-format.md](archive-info-format.md).
 14. Delete the original plan folder `[plansFolder]/[selected-plan]/` entirely.
 15. Clean up session references to the archived plan:
     - Delete `[plansFolder]/.sessions/[sessionPID]` if it contains the archived plan slug.
@@ -56,7 +57,7 @@ To do this, follow these steps precisely:
     Plan archived to: [plansFolder]/archived/[folder-name]/
 
     The original plan folder has been removed.
-    Create a new plan with `/plan-create`.
+    Create a new plan with `/plan:create`.
     ```
 
 Notes:
@@ -69,23 +70,3 @@ Notes:
 - Always delete the original plan folder after archiving
 - It is valid to archive a plan that was never executed (abandoned, reference, or superseded plans).
   In this case, the execution status will be `NOT_EXECUTED`.
-
----
-
-## Archive Info Format
-
-Write to `[plansFolder]/archived/[folder-name]/archive-info.md`:
-
-```markdown
-# Archive Info
-
-> Title: [Plan Title]
-> Keywords: [comma-separated keywords from critique, or "none"]
-> Archived: [YYYY-MM-DD HH:MM:SS]
-> Execution Status: [COMPLETED | FAILED | PARTIAL | NOT_EXECUTED]
-
-## Files Included
-
-- plan.md
-- [list other files that were archived]
-```

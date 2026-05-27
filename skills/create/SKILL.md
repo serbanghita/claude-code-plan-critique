@@ -11,12 +11,12 @@ To do this, follow these steps precisely:
 1. Display the following banner before doing anything else:
    ```
    +-------------------------------------------------+
-   |  Plan Critique v1.4.0 - Creating new plan       |
+   |  Plan Critique v2.0.0 - Creating new plan       |
    +-------------------------------------------------+
    ```
 2. Read `.claude/plan-critique-config.json` and get `plansFolder` path from settings.
    If the file doesn't exist or `plansFolder` is not set:
-   - Ask the user: "Where would you like to store your plans? Provide a folder path (default `.planning`):". 
+   - Ask the user: "Where would you like to store your plans? Provide a folder path (default `.planning`):".
      By default, the user should be presented with the option `.planning`.
    - Save the path as `plansFolder` in `.claude/plan-critique-config.json`
    - Create the folder if it doesn't exist
@@ -41,32 +41,18 @@ To do this, follow these steps precisely:
    - Get the Claude Code process ID by running: `echo $PPID`
    - Create the sessions directory if needed: `[plansFolder]/.sessions/`
    - Write the slug to `[plansFolder]/.sessions/[PID]` (plain text, just the slug)
-8. Create the plan template at `[plansFolder]/[slug]/plan.md` using the format in "Plan Template" section below.
+8. Create the plan template at `[plansFolder]/[slug]/plan.md` using the template in
+   [plan-template.md](plan-template.md).
 9. Respond with confirmation:
    ```
    Created new plan: [plansFolder]/[slug]/
    Edit your plan at: [plansFolder]/[slug]/plan.md
-   When ready, run `/plan-critique` to review your plan.
+   When ready, run `/plan:critique` to review your plan.
    ```
 
 Notes:
 
 - The slug must be filesystem-safe (no special characters)
 - Keep the original plan name with proper casing in the H1 heading of plan.md
-- Only create plan.md initially (critique.md is created by `/plan-critique`)
+- Only create plan.md initially (critique.md is created by `/plan:critique`)
 - Always use `plansFolder` from settings as the base directory
-
----
-
-## Plan Template
-
-```markdown
-# [Original plan name with proper casing]
-
-Describe what you want to achieve. Be specific.
-Split your specifications by Module, Model, Chapters, Subchapters so they can be addressed in the critique phase.
-
-## Chapter 1 (rename this)
-
-Description of what you are trying to achieve.
-```

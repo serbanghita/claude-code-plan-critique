@@ -1,7 +1,7 @@
 # claude-code-plan-critique
 > Plan -> Critique (N times) -> Execute -> Archive
 
-Claude Code commands for iterative plan review and execution.  
+Claude Code skills for iterative plan review and execution.  
 Enables you to work with multiple user written plans while keeping control of the feedback-loop from the LLM.  
 See [ghita.org/blog/claude-code-plan-critique](https://ghita.org/blog/claude-code-plan-critique/) for a better explanation of this project.
 
@@ -26,31 +26,40 @@ Add the marketplace and install the plugin from within Claude Code:
 
 ```
 /plugin marketplace add serbanghita/claude-code-plan-critique
-/plugin install plan-critique@serbanghita
+/plugin install plan@serbanghita
 ```
+
+Installed as a plugin, the skills are namespaced under the plugin name `plan`:
+`/plan:create`, `/plan:critique`, `/plan:execute`, `/plan:archive`.
 
 ### Manual installation via git clone
 
-Clone the repository and copy the commands to your project:
+Clone the repository and copy the skills to your project:
 
 ```bash
 git clone https://github.com/serbanghita/claude-code-plan-critique.git && \
-mkdir -p .claude/commands && \
-cp -r claude-code-plan-critique/.claude/commands/* .claude/commands/ && \
+mkdir -p .claude/skills && \
+cp -r claude-code-plan-critique/skills/* .claude/skills/ && \
 rm -rf claude-code-plan-critique
 ```
 
-If Claude Code is already running, restart it to load the new commands.
+Installed manually, the skills are invoked without a namespace:
+`/create`, `/critique`, `/execute`, `/archive`. These bare names are generic, so prefer the
+marketplace install if you run other skills with the same names.
+
+If you upgraded from a previous manual install, delete the old `.claude/commands/plan-*.md` files.
+
+If Claude Code is already running, restart it to load the new skills.
 
 ## How it works
 
 ```
-/plan-create ──► edit 'plan.md' ──► /plan-critique ──► read 'critique.md', update 'plan.md'
+/plan:create ──► edit 'plan.md' ──► /plan:critique ──► read 'critique.md', update 'plan.md'
                       ▲                                     │
                       └──────── iterate until satisfied ────┘
                                         │
                                         ▼
-                              /plan-execute ──► /plan-archive
+                              /plan:execute ──► /plan:archive
 ```
 
 ## Usage
@@ -60,13 +69,16 @@ If Claude Code is already running, restart it to load the new commands.
 - [Claude Code](https://claude.ai/claude-code) CLI installed
 - A `CLAUDE.md` file in your project root with your project standards
 
-### Commands
+### Skills
 
-1. `/plan-create` - Create a new plan in `.planning/[plan name]/plan.md`. Asks for the plan name.
-2. `/plan-critique` - Claude Code reviews your plan. Generates a `critique.md` with issues and suggestions.
+Marketplace installs use the namespaced form below. Manual installs use the bare form
+(`/create`, `/critique`, `/execute`, `/archive`).
+
+1. `/plan:create` - Create a new plan in `.planning/[plan name]/plan.md`. Accepts the plan name as an argument.
+2. `/plan:critique` - Claude Code reviews your plan. Generates a `critique.md` with issues and suggestions.
 3. User decides which parts of critique are good for the plan and updates `plan.md`. Go back to 2.
-4. `/plan-execute` - Execute your plan. Parses the plan into steps, asks for confirmation, and runs each step. Supports resume on failure.
-5. `/plan-archive` - Archive a completed plan. Moves it to `.planning/archived/` and deletes the original.
+4. `/plan:execute` - Execute your plan. Parses the plan into steps, asks for confirmation, and runs each step. Supports resume on failure.
+5. `/plan:archive` - Archive a completed plan. Moves it to `.planning/archived/` and deletes the original.
 
 ### Parallel Plans
 
@@ -78,13 +90,13 @@ Example workflow with two terminals:
 ```
 Terminal 1                          Terminal 2
 ──────────────────────────────────  ──────────────────────────────────
-/plan-create "Add Authentication"   /plan-create "Fix Database Bug"
+/plan:create "Add Authentication"   /plan:create "Fix Database Bug"
 edit plan.md                        edit plan.md
-/plan-critique                      /plan-critique
+/plan:critique                      /plan:critique
 ...                                 ...
 ```
 
-Each terminal remembers which plan it's working on. When you run `/plan-critique` or `/plan-execute`, your
+Each terminal remembers which plan it's working on. When you run `/plan:critique` or `/plan:execute`, your
 session's plan is marked as "(current session)" in the selection list.
 
 Add `.planning/.sessions/` to your `.gitignore` - these are local session files that should not be committed.

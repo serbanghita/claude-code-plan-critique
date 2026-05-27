@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-05-27
+
+### Changed
+- BREAKING: migrated from slash commands to the Skills format. The four commands now live as skills
+  under `skills/create`, `skills/critique`, `skills/execute`, and `skills/archive`.
+- BREAKING: the plugin is renamed from `plan-critique` to `plan`. Install with
+  `/plugin install plan@serbanghita`. Marketplace users invoke the namespaced `/plan:create`,
+  `/plan:critique`, `/plan:execute`, `/plan:archive`; manual installs use the bare `/create`,
+  `/critique`, `/execute`, `/archive`.
+- BREAKING: manual install now copies `skills/*` into `.claude/skills/` (previously `.claude/commands/`).
+  Delete any old `.claude/commands/plan-*.md` files from prior manual installs.
+- Large format blocks were extracted into per-skill supporting files (`plan-template.md`,
+  `critique-format.md`, `execution-log-format.md`, `execution-state-format.md`, `archive-info-format.md`)
+  and linked from each `SKILL.md`, loaded on demand for leaner skill bodies.
+- Removed the now-unused `commands` array from `plugin.json`; skills are auto-discovered from `skills/`.
+
 ## [1.4.0] - 2026-05-26
 
 ### Added

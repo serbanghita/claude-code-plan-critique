@@ -6,7 +6,7 @@
   },
   "plugins": [
     {
-      "name": "plan-critique",
+      "name": "plan",
       "source": "./",
       "description": "Iterative plan review and execution workflow for Claude Code"
     }

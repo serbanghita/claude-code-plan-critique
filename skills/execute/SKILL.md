@@ -10,7 +10,7 @@ To do this, follow these steps precisely:
 
 1. Read `.claude/plan-critique-config.json` and get `plansFolder` path from settings.
    If the file doesn't exist or `plansFolder` is not set:
-   Respond with "No plans folder configured. Run `/plan-create` first to set up."
+   Respond with "No plans folder configured. Run `/plan:create` first to set up."
 2. Get the Claude Code process ID by running: `echo $PPID`. Store this as `sessionPID`.
 3. Clean up stale sessions: Scan `[plansFolder]/.sessions/` for files. For each file named with a PID, check if that
    process is still running via `kill -0 [PID] 2>/dev/null`. If the command fails (process not running), delete that
@@ -18,7 +18,7 @@ To do this, follow these steps precisely:
 4. Read the current session's plan from `[plansFolder]/.sessions/[sessionPID]` if it exists. Store as `sessionPlan`.
 5. Scan `[plansFolder]/` for subdirectories (each subdirectory is a plan).
    Exclude `archived/` and `.sessions/` folders and any files, only list plan directories.
-   If no plan folders exist: Respond with "No plans found. Create one with `/plan-create`".
+   If no plan folders exist: Respond with "No plans found. Create one with `/plan:create`".
 6. Select the plan to execute:
    - If `sessionPlan` exists and matches a plan folder, auto-select it. Inform the user:
      "Using current session plan: [sessionPlan]"
@@ -36,7 +36,7 @@ To do this, follow these steps precisely:
 7. Update the session file `[plansFolder]/.sessions/[sessionPID]` with the selected plan slug (create if needed).
 8. Check prerequisites:
    - If `[plansFolder]/[selected-plan]/plan.md` does not exist: Respond with "No plan.md found."
-   - If `plan.md` is empty: Respond with "Plan file is empty. Run /plan-critique first."
+   - If `plan.md` is empty: Respond with "Plan file is empty. Run /plan:critique first."
 9. Read `CLAUDE.md` from the project root if it exists. Hold its standards as context and ensure compliance during
    each execution step. If it does not exist, note this but do not block execution.
 10. Read `[plansFolder]/[selected-plan]/critique.md` if it exists. Note the iteration number and summary.
@@ -44,7 +44,7 @@ To do this, follow these steps precisely:
     Use the critique as supplementary context during execution: implementation hints, alternative approaches,
     and risk warnings from the critique are relevant when executing related steps. Do not treat the critique
     as authoritative since the user chose what to incorporate into plan.md.
-    If critique.md does not exist, warn: "This plan has not been critiqued. Run `/plan-critique` first,
+    If critique.md does not exist, warn: "This plan has not been critiqued. Run `/plan:critique` first,
     or confirm you want to proceed without review." Wait for user confirmation before continuing.
 11. Check git status by running `git status`.
     - If git repo and clean: inform user "Git available. Per-step commits will be offered after each step."
@@ -89,7 +89,8 @@ To do this, follow these steps precisely:
     Wait for the user to confirm or request changes to the ordering.
 16. Execute each step sequentially:
     - Record the step start time.
-    - Before each step, update execution-state.json with current progress including `stepStartedAt`.
+    - Before each step, update execution-state.json with current progress including `stepStartedAt`
+      (see [execution-state-format.md](execution-state-format.md)).
     - Ask for explicit user permission before high-risk operations:
       - Database migrations or schema changes
       - Deleting files or directories
@@ -108,7 +109,8 @@ To do this, follow these steps precisely:
       - If the user chose "yes-to-all", commit subsequent steps automatically without asking.
       - Commit message format: `plan-execute: [plan-slug] step N - [brief description]`
       - Record the commit hash in execution-state.json under `gitCommits`.
-    - Compute step duration and log results to execution-log.md including duration and files changed.
+    - Compute step duration and log results to execution-log.md including duration and files changed
+      (see [execution-log-format.md](execution-log-format.md)).
     - If a step introduces architectural patterns that should be documented in `CLAUDE.md`,
       flag this to the user immediately rather than waiting until completion.
     - On error:
@@ -119,14 +121,14 @@ To do this, follow these steps precisely:
         1. Fix and retry - attempt to fix the issue, then re-execute this step.
         2. Skip step - mark as SKIPPED, warn about downstream dependencies, continue.
         3. Rollback step - if git commits are available, revert the last commit. Then stop.
-        4. Stop execution - save state, stop. Resume later with `/plan-execute`.
+        4. Stop execution - save state, stop. Resume later with `/plan:execute`.
       - Wait for user choice.
 17. On successful completion:
     - Update execution log with final summary.
     - Delete execution-state.json.
     - If git was used, mention the commit count: "Plan executed across N commits.
       Review with `git log --oneline -N`."
-    - Inform user: "Plan executed successfully. Run `/plan-archive` to archive this plan."
+    - Inform user: "Plan executed successfully. Run `/plan:archive` to archive this plan."
 
 Notes:
 
@@ -144,65 +146,3 @@ Notes:
   documented in CLAUDE.md, flag this to the user immediately.
 - Execution state is best-effort. If Claude crashes mid-step, the state file may not reflect the
   actual codebase state. Git commits provide the definitive record of what was completed.
-
----
-
-## Execution Log Format
-
-Write to `[plansFolder]/[selected-plan]/execution-log.md`:
-
-```markdown
-# Execution Log: [Plan Title]
-
-Started: [YYYY-MM-DD HH:MM:SS]
-
----
-
-## Step 1: [Step description]
-
-Result: [COMPLETED | FAILED | SKIPPED]
-Duration: [Xm Ys]
-Files changed: [list of file paths, or "none"]
-
-Output:
-[relevant output, changes made, or error messages]
-[for FAILED steps, include the actual error output verbatim]
-
----
-
-## Summary
-
-- Total steps: [X]
-- Completed: [Y]
-- Failed: [Z]
-- Skipped: [W]
-- Git commits: [list of commit hashes, or "none"]
-
-[If failed or partial:]
-Execution stopped at step [N]. Run `/plan-execute` to resume.
-```
-
----
-
-## Execution State Format
-
-Write to `[plansFolder]/[selected-plan]/execution-state.json`:
-
-```json
-{
-  "planTitle": "[title]",
-  "totalSteps": 5,
-  "currentStep": 2,
-  "completedSteps": [0, 1],
-  "skippedSteps": [],
-  "failedStep": null,
-  "startedAt": "2026-01-12T10:30:00Z",
-  "lastUpdated": "2026-01-12T10:35:00Z",
-  "stepStartedAt": "2026-01-12T10:35:00Z",
-  "gitAvailable": true,
-  "gitCommits": [
-    {"step": 0, "hash": "abc1234"},
-    {"step": 1, "hash": "def5678"}
-  ]
-}
-```

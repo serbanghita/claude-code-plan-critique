@@ -12,7 +12,7 @@ Critique the plan, code, architecture, system design, and design patterns.
 To do this, follow these steps precisely:
 
 1. Read `.claude/plan-critique-config.json`, get `plansFolder` path from settings. If the file doesn't exist or
-   `plansFolder` is not set: Respond with "No plans folder configured. Run `/plan-create` first to set up."
+   `plansFolder` is not set: Respond with "No plans folder configured. Run `/plan:create` first to set up."
 2. Get the Claude Code process ID by running: `echo $PPID`. Store this as `sessionPID`.
 3. Clean up stale sessions: Scan `[plansFolder]/.sessions/` for files. For each file named with a PID, check if that
    process is still running via `kill -0 [PID] 2>/dev/null`. If the command fails (process not running), delete that
@@ -20,7 +20,7 @@ To do this, follow these steps precisely:
 4. Read the current session's plan from `[plansFolder]/.sessions/[sessionPID]` if it exists. Store as `sessionPlan`.
 5. Scan `[plansFolder]/` for subdirectories (each subdirectory is a plan). Exclude `archived/` and `.sessions/`
    folders and any files, only list plan directories.
-   If no plan folders exist: Respond with "No plans found. Create one with `/plan-create`".
+   If no plan folders exist: Respond with "No plans found. Create one with `/plan:create`".
 6. Select the plan to critique:
    - If `sessionPlan` exists and matches a plan folder, auto-select it. Inform the user:
      "Using current session plan: [sessionPlan]"
@@ -80,7 +80,7 @@ To do this, follow these steps precisely:
     When writing the critique, follow the original chapters from `plan.md`.
     The goal is to be able to easily override the `plan.md` if the user chooses to merge `critique.md` with `plan.md`
 
-    Use the following format suggested in the "Critique Format" chapter.
+    Use the format in [critique-format.md](critique-format.md).
 
 Notes:
 
@@ -97,42 +97,7 @@ Notes:
 - Be direct and constructive in feedback
 - Suggest multiple solutions when appropriate
 - Each critique iteration completely overwrites the previous critique.md file.
-- Discard addressed issues**: If an issue from the previous critique has been fixed in plan.md, do not include it.
+- Discard addressed issues: If an issue from the previous critique has been fixed in plan.md, do not include it.
 - Only include current issues: The critique should reflect the current state of plan.md.
 - New unrelated observations: If new issues appear that don't fit under existing plan.md chapters add them as new chapters at the bottom of the critique
 - Increment iteration number: Always increment from the previous critique's iteration number
-
----
-
-## Critique Format
-
-```markdown
-# [Title extracted from first H1 in plan.md, or "Untitled Plan"]
-> Keywords: [auto-generated comma-separated keywords based on plan content]  
-Iteration: [number]
-
-## Summary
-
-[Brief overview of the plan and overall assessment. Only use bullets, no formatting.]
-
----
-
-## [Plan chapter title or Plan chapter title - specific issue]
-
-Description:    
-[Clear, concise summary of the issue]
-
-Suggested Solution:    
-[Suggested fix with all pertinent details]
-
-    ```[language]
-    [code block only if applicable, be brief]
-    ```
-
----
-
-[Repeat for each issue found]
-
-[If no issues found:]
-No issues found. Plan is ready for execution via `/plan-execute`.
-```
